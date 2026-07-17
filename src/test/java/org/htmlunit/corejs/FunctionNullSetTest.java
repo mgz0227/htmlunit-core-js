@@ -7,8 +7,8 @@ import java.lang.reflect.Method;
 import org.htmlunit.corejs.javascript.Context;
 import org.htmlunit.corejs.javascript.ContextAction;
 import org.htmlunit.corejs.javascript.Function;
-import org.htmlunit.corejs.javascript.Scriptable;
 import org.htmlunit.corejs.javascript.ScriptableObject;
+import org.htmlunit.corejs.javascript.TopLevel;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -28,12 +28,12 @@ public class FunctionNullSetTest {
             @Override
             public Object run(final Context cx) {
                 try {
-                    final Scriptable scope = cx.initSafeStandardObjects();
+                    final TopLevel scope = cx.initSafeStandardObjects();
                     final MyHostObject prototype = new MyHostObject();
                     ScriptableObject.defineClass(scope, MyHostObject.class);
                     final Method getterMethod = MyHostObject.class.getMethod("jsxGet_onclick");
                     final Method setterMethod = MyHostObject.class.getMethod("jsxSet_onclick", Object.class);
-                    prototype.defineProperty("onclick", null, getterMethod , setterMethod, ScriptableObject.EMPTY);
+                    prototype.defineProperty(scope, "onclick", null, getterMethod , setterMethod, ScriptableObject.EMPTY);
 
                     ScriptableObject.defineProperty(scope, "o", prototype, ScriptableObject.DONTENUM);
 
@@ -41,9 +41,9 @@ public class FunctionNullSetTest {
                     jsObj.setPrototype(prototype);
                     jsObj.setParentScope(scope);
 
-                    final Function realFunction_ = cx.compileFunction(jsObj, script, "myevent", 0, null);
+                    final Function realFunction_ = cx.compileFunction(scope, script, "myevent", 0, null);
 
-                    realFunction_.call(cx, jsObj, jsObj, new Object[0]);
+                    realFunction_.call(cx, scope, jsObj, new Object[0]);
 
                     assertNull(jsObj.onclick_);
                 }

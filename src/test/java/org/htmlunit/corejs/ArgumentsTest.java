@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.htmlunit.corejs.javascript.Context;
 import org.htmlunit.corejs.javascript.ContextAction;
 import org.htmlunit.corejs.javascript.ContextFactory;
-import org.htmlunit.corejs.javascript.Scriptable;
+import org.htmlunit.corejs.javascript.TopLevel;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -29,7 +29,7 @@ public class ArgumentsTest {
                 + "}\n"
                 + "f();\n";
 
-        Utils.assertWithAllModes_ES6("", script);
+        Utils.assertWithAllModes("", script);
     }
 
 
@@ -43,7 +43,7 @@ public class ArgumentsTest {
                 + "f(1, 2);\n"
                 + "f.arguments";
 
-        Utils.assertWithAllModes_ES6(null, script);
+        Utils.assertWithAllModes(null, script);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ArgumentsTest {
                 + "f();\n"
                 + "output";
 
-        Utils.assertWithAllModes_ES6("[object Arguments]", script);
+        Utils.assertWithAllModes("[object Arguments]", script);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ArgumentsTest {
         // we do a hard coded replacement
         // runScript(script, "2-hi-undefined-you", Context.FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW, true);
         // runScript(script, "2-hi-undefined-you", Context.FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW, false);
-        Utils.assertWithAllModes_ES6("2-hi-undefined-you", script);
+        Utils.assertWithAllModes("2-hi-undefined-you", script);
     }
 
     /**
@@ -107,7 +107,7 @@ public class ArgumentsTest {
         // we do a hard coded replacement
         // runScript(script, "2-world-undefined-undefined", Context.FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW, true);
         // runScript(script, "2-hi-undefined-you", Context.FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW, false);
-        Utils.assertWithAllModes_ES6("2-world-undefined-undefined", script);
+        Utils.assertWithAllModes("2-world-undefined-undefined", script);
     }
 
     /**
@@ -123,7 +123,7 @@ public class ArgumentsTest {
         // we do a hard coded replacement
         // runScript(script, false, Context.FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW, true);
         // runScript(script, true, Context.FEATURE_HTMLUNIT_FN_ARGUMENTS_IS_RO_VIEW, false);
-        Utils.assertWithAllModes_ES6(false, script);
+        Utils.assertWithAllModes(false, script);
     }
 
     private static void runScript(final String script, final Object expectedResult,
@@ -141,7 +141,7 @@ public class ArgumentsTest {
         final ContextAction<Object> action = new ContextAction<Object>() {
             @Override
             public Object run(final Context cx) {
-                final Scriptable scope = cx.initSafeStandardObjects();
+                final TopLevel scope = cx.initSafeStandardObjects();
                 final Object result = cx.evaluateString(scope, script, "test.js", 1, null);
                 assertEquals(expectedResult, result);
                 return null;
@@ -161,7 +161,7 @@ public class ArgumentsTest {
                 + "}\n"
                 + "test1('hello')";
 
-        Utils.assertWithAllModes_ES6("hello", script);
+        Utils.assertWithAllModes("hello", script);
     }
 
     /**
@@ -174,6 +174,6 @@ public class ArgumentsTest {
                 + "}\n"
                 + "test1('hello')";
 
-        Utils.assertWithAllModes_ES6("object", script);
+        Utils.assertWithAllModes("object", script);
     }
 }
